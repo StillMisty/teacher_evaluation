@@ -32,6 +32,8 @@ def get_academicTitle(degress: int) -> str:
         return ""
     
 async def content_review(content: str) -> bool:
+    if settings.CONTENT_REVIEW == False:
+        return True
     
     request_url = "https://aip.baidubce.com/rest/2.0/solution/v1/text_censor/v2/user_defined"
     

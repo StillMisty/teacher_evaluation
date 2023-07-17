@@ -32,7 +32,6 @@ class Config(BaseSettings):
     DATABASE_ECHO: bool = False
     
     # 百度AI配置
-    ACCESS_TOKEN: str = "24.adb3bf504f2282849d84065f9ccf50d4.2592000.1692182152.282335-36292318"
-    
+    ACCESS_TOKEN: str = ""
 
 settings = Config()
