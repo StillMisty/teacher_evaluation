@@ -2,12 +2,12 @@ import httpx
 import json
 import asyncio
 import os
-from typing import List
+
 os.chdir(os.path.dirname(__file__))
 
 
 async def main():
-    total_info : List[dict] = json.load(open("total_info.json", "r", encoding="utf-8"))
+    total_info : list[dict] = json.load(open("total_info.json", "r", encoding="utf-8"))
     url = r"http://cta.jxufe.edu.cn/home/teachInfo"
     
     async with httpx.AsyncClient() as client:
@@ -21,7 +21,7 @@ async def main():
             }
             res = await client.post(url,data=data)
             new_data = res.json()["data"]
-            with open(f"./详细info/{uid}.json", "w", encoding="utf-8") as f:
+            with open(f"./teacher/{uid}.json", "w", encoding="utf-8") as f:
                 f.write(new_data)
                 
                 
