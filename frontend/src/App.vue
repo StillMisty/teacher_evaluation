@@ -40,10 +40,9 @@ function searchTeacher(teacher_id) {
       teacher.value[key] = res.data[key]
     });
     if (teacher.value.researchFields != ''){
-      teacher.value.researchFields = teacher.value.researchFields.slice(2, -2).replace('，',' ')
+      teacher.value.researchFields = teacher.value.researchFields.slice(2, -2).replace(/"/g,' ')
     }
     teacher.value.photo = `${baseUrl}/${teacher.value.photo}`
-    console.log(teacher.value)
   })
 
 

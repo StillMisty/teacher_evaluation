@@ -325,6 +325,17 @@ files = [
 ]
 
 [[package]]
+name = "ipy"
+version = "1.01"
+description = "Class and tools for handling of IPv4 and IPv6 addresses and networks"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "IPy-1.01.tar.gz", hash = "sha256:edeca741dea2d54aca568fa23740288c3fe86c0f3ea700344571e9ef14a7cc1a"},
+]
+
+[[package]]
 name = "itsdangerous"
 version = "2.1.2"
 description = "Safely pass data to untrusted environments and back."
@@ -999,4 +1010,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "cc4b03490ab506195f701fdfaf702ec53bfc613525606df97f51b7a471c89d2c"
+content-hash = "82637dab86463fba58314d9bd00d597562e55fffe9a604f7e7891f791bf7bb26"

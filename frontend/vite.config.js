@@ -40,7 +40,6 @@ export default defineConfig({
   base: './',
   build: {
     outDir: 'dist',
-    emptyOutDir: false,
     assetsInlineLimit: 4096,
     assetsDir: 'assets',
   }

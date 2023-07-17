@@ -1,7 +1,7 @@
 
 <template>
     <section>
-        <h1 style="margin-bottom: 20px;">
+        <h1 style="margin-bottom: 20px;cursor: default;user-select: none;">
             <el-image :src="Props.logoUrl" @error="logo_show = !logo_show" v-if="logo_show" style="height: 72px;width: 72px;vertical-align: bottom;" class="logo"/>
             <el-text type="primary" style="font-size: 36px;">教师评价</el-text>
         </h1>

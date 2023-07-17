@@ -38,6 +38,7 @@
                     placeholder="发出你的声音"
                     show-word-limit
                     type="textarea"
+                    resize="none"
                     :autosize="{ minRows: 9, maxRows: 9 }"
                 />
                 <div class="commit" @click="postComment">
@@ -117,13 +118,23 @@ function postScores(){
             attendance_attitude: PersonalGrade.value[4].value
         })
     })
+    .then(res => res.json())
+    .then(res => {
+        if (res.code === 200) {
+            ElMessage({
+                message: '提交成功',
+                type: 'success',
+            })
 
-    ElMessage({
-        message: '提交成功',
-        type: 'success',
+            isPostScores.value = true
+            
+        }else if (res.code === 403) {
+            ElMessage({
+                message: 'IP不在允许内，请连接校园网后重试',
+                type: 'error',
+            })
+        }
     })
-    isPostScores.value = true
-    
 }
 
 function postComment(){
@@ -136,18 +147,28 @@ function postComment(){
             id: Props.teacherId,
             content: comment.value
         })
-    })
+    })  
+    .then(res => res.json())
+    .then(res => {
+        if (res.code === 200) {
+            ElMessage({
+                message: '提交成功',
+                type: 'success',
+            })
 
-    ElMessage({
-        message: '提交成功',
-        type: 'success',
+            Props.updataComments({
+                id: Props.teacherId,
+                content: comment.value,
+                create_time: new Date().toLocaleString()
+            })
+            comment.value = ''
+        }else if (res.code === 403) {
+            ElMessage({
+                message: 'IP不在允许内，请连接校园网后重试',
+                type: 'error',
+            })
+        }
     })
-    Props.updataComments({
-        id: Props.teacherId,
-        content: comment.value,
-        create_time: new Date().toLocaleString()
-    })
-    comment.value = ''
 }
 
 </script>

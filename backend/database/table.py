@@ -1,6 +1,6 @@
 
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from  sqlalchemy import create_engine, func
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
@@ -26,13 +26,13 @@ class teachers(Base):
     # 教学水平
     teaching_level = Column(Integer, default=0)    
     teaching_level_people = Column(Integer, default=0)
-    # 期末给分
+    # 期末捞人
     score_end = Column(Integer, default=0)
     score_end_people = Column(Integer, default=0)
     # 教师人品
     teacher_morality = Column(Integer, default=0)
     teacher_morality_people = Column(Integer, default=0)
-    # 考勤态度
+    # 考勤宽松
     attendance_attitude = Column(Integer, default=0)
     attendance_attitude_people = Column(Integer, default=0)
     

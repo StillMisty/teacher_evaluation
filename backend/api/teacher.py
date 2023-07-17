@@ -1,6 +1,5 @@
 
-from fastapi import APIRouter,  Query, Body
-
+from fastapi import APIRouter,  Query, Request
 from database.query import *
 from database.updata import updata_teacher_score
 from database.insert import insert_comment
@@ -207,10 +206,14 @@ async def name_teacher_evaluate(
     
 @router.post("/post_teacher_score")
 async def post_teacher_score(
+    request: Request,
     *,
     teacher_scores: TeacherEvaluate
 ):
     '''提交教师评分'''
+    if ip_review(request.client.host) == False:
+        return fail(msg="您的IP不在允许范围内",code=403)
+    
     teacher = query_id(teacher_scores.id)
     if teacher == None:
         return fail(msg="没有找到该教师",code=404)
@@ -221,15 +224,20 @@ async def post_teacher_score(
 
 @router.post("/post_teacher_comment")
 async def post_teacher_comment(
+    request: Request,
     *,
     teacher_comment: CommentBase
 ):
     '''提交教师评论'''
+    
+    if ip_review(request.client.host) == False:
+        return fail(msg="您的IP不在允许范围内",code=403)
+    
     teacher = query_id(teacher_comment.id)
     if teacher == None:
         return fail(msg="没有找到该教师",code=404)
     
-    insert_comment(teacher_comment)
+    await insert_comment(teacher_comment)
     
     return success(msg="提交成功")
 
