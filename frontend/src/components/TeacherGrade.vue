@@ -34,6 +34,7 @@
                 <div style="display: flex;flex-direction: column;justify-content: space-between;height: 100%;">
                     <el-input
                     v-model="comment"
+                    minlength="5"
                     maxlength="300"
                     placeholder="发出你的声音"
                     show-word-limit
@@ -138,6 +139,15 @@ function postScores(){
 }
 
 function postComment(){
+    if (comment.value.length < 5) {
+        ElMessage({
+            message: '评论字数不得少于5个字',
+            type: 'error',
+        })
+        return
+    }
+
+
     fetch(`${Props.baseUrl}/api/teacher/post_teacher_comment`, {
         method: 'POST',
         headers: {

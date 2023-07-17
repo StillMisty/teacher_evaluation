@@ -6,27 +6,33 @@ from pydantic import BaseSettings
 class Config(BaseSettings):
     # 加载环境变量
     load_dotenv(find_dotenv(), override=True)
+    
     # 调试模式
     APP_DEBUG: bool = False
+    
     # 是否使用IP验证
-    SEGMENTATION: bool = True
+    SEGMENTATION: bool = False
     #财专ip端，用列表方便扩展
     SEGMENTATION_IP: list[str] = ['210.35.192.0-210.35.207.255'] 
+    
     # 静态资源目录
     STATIC_DIR: str = os.path.join(os.getcwd(), "static")
     TEMPLATE_DIR: str = os.path.join(STATIC_DIR, "template")
     TEACHER_DIR: str = os.path.join(STATIC_DIR, "teacher")
     PHOTO_DIR: str = os.path.join(STATIC_DIR, "photo")
+    
     # 跨域请求
     CORS_ORIGINS: list = ["*"]
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: list = ["*"]
     CORS_ALLOW_HEADERS: list = ["*"]
+    
     # 数据库配置
     DATABASE_URL: str = "sqlite:///./blog.db"
     DATABASE_ECHO: bool = False
-    # 百度AI配置，这个就不留了
-    ACCESS_TOKEN: str = ""
+    
+    # 百度AI配置
+    ACCESS_TOKEN: str = "24.adb3bf504f2282849d84065f9ccf50d4.2592000.1692182152.282335-36292318"
     
 
 settings = Config()
