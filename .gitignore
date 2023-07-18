@@ -1,9 +1,12 @@
 /teacher_info/photo/
 /teacher_info/info/
 /teacher_info/total_info.json
+
 /frontend/node_modules/
 /frontend/dist/
+
 /backend/static/
+/backend/blog.db
 
 
 *.pyc

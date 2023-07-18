@@ -75,7 +75,11 @@ function searchTeacher(teacher_id) {
       }
   })
 
-  search.value = true
+  // 销毁组件
+  search.value = false
+  setTimeout(() => {
+    search.value = true
+  }, 0);
 }
 
 function undataComments(comment) {
