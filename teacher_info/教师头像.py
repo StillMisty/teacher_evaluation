@@ -5,6 +5,10 @@ import os
 os.chdir(os.path.dirname(__file__))
 
 async def main():
+    
+    if not os.path.exists("headimgs"):
+        os.mkdir("headimgs")
+    
     total_info : list[dict] = json.load(open("total_info.json", "r", encoding="utf-8"))
     url = r"http://p.ananas.chaoxing.com/star3/origin/"
     headers = {

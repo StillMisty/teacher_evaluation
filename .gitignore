@@ -1,5 +1,5 @@
-/teacher_info/photo/
-/teacher_info/info/
+/teacher_info/headimgs/
+/teacher_info/teacher/
 /teacher_info/total_info.json
 
 /frontend/node_modules/
@@ -7,6 +7,6 @@
 
 /backend/static/
 /backend/blog.db
-
+/backend/blog.db-journal
 
 *.pyc
