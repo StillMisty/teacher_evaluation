@@ -55,7 +55,7 @@ const querySearch = (queryString, cb) => {
     clearTimeout(timeout)
     timeout = setTimeout(() => {
         cb(results)
-    }, 300 * Math.random())
+    }, 200 * Math.random())
 }
 
 const getSuggestions = (queryString) => {
@@ -108,11 +108,11 @@ section {
     justify-content: center;
     flex-direction: column;
     width: 100%;
-    transition: var(--el-transition-all);
+    transition: all 2s;
 }
 
 .SearchBar{
-    margin: 18px 0 12px 0;
+    margin: 36px 0 12px 0;
     width: 100%;
     display: flex;
     align-items: center;

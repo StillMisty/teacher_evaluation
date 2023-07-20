@@ -3,7 +3,7 @@
     <li v-for="comment in Props.comments" :key="comment.id" class="infinite-list-item">
       <div>
         <el-text>
-          {{ comment.content  }}
+          {{ comment.content }}
         </el-text>
       </div>
       <div class="time"><el-text type="info" size="small">
