@@ -1,8 +1,8 @@
 
 <template>
   <div class="main">
-  <HomePage :logo-url="logoUrl" :base-url="baseUrl" :search-teacher="searchTeacher"></HomePage>
-  <section class="AfterSearch" v-if="search">  
+  <HomePage :logo-url="logoUrl" :base-url="baseUrl" :search-teacher="searchTeacher" :is-search="search"></HomePage>
+  <section class="AfterSearch" v-if="search">
     <TeacherBrief v-bind="teacher"></TeacherBrief>
     <TeacherInfo :teacher-infos="teacherInfos"></TeacherInfo>
     <TeacherGrade :teacher-grades="teacherGrades" :teacher-id="teacher.id" :base-url="baseUrl" :updata-comments="undataComments"></TeacherGrade>
@@ -20,10 +20,8 @@ import TeacherGrade from './components/TeacherGrade.vue'
 import TeacherComment from './components/TeacherComment.vue';
 
 let baseUrl = window.location.origin
-
 // 是否搜索过
 const search = ref(false)
-
 const logoUrl = ref(`${baseUrl}/logo.png`)
 
 const teacher = ref({})

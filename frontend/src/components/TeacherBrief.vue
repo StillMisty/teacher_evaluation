@@ -81,7 +81,7 @@ const Props = defineProps({
     align-items: center;
     justify-content: center;
     flex-direction: row;
-    height: 160px;
+    height: 180px;
     width: 100%;
     background-color: var(--el-fill-color-light);
     border: var(--el-border);

@@ -1,7 +1,7 @@
 
 <template>
-    <section>
-        <h1 style="margin-bottom: 20px;cursor: default;user-select: none;">
+    <section :style="{'height': homeHeight}">
+        <h1 style="margin-bottom: 20px;cursor: default;user-select: none;" v-if="!Props.isSearch">
             <el-image :src="Props.logoUrl" @error="logo_show = !logo_show" v-if="logo_show" style="height: 72px;width: 72px;vertical-align: bottom;" class="logo"/>
             <el-text type="primary" style="font-size: 36px;">教师评价</el-text>
         </h1>
@@ -18,12 +18,12 @@
           />
         </div>
 
-        <p style="min-height: 200px;"><el-text type="info"></el-text></p>
+        <p style="min-height: 200px;" v-if="!Props.isSearch"><el-text type="info"></el-text></p>
     </section>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref,defineProps, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const Props = defineProps({
@@ -38,6 +38,10 @@ const Props = defineProps({
     searchTeacher: {
         type: Function,
         default: () => {}
+    },
+    isSearch: {
+        type: Boolean,
+        default: false
     }
 })
 
@@ -87,7 +91,13 @@ const handleSelect = (item) => {
     Props.searchTeacher(item.id)
 }
 
-
+const homeHeight = ref('100vh')
+watch(()=>Props.isSearch, (newVal) => {
+    if (newVal) {
+        homeHeight.value = 'auto'
+        queryString.value = ''
+    }
+})
 </script>
 
 <style scoped>
@@ -98,15 +108,18 @@ section {
     justify-content: center;
     flex-direction: column;
     width: 100%;
-    height: 100vh;
+    transition: var(--el-transition-all);
 }
+
 .SearchBar{
+    margin: 18px 0 12px 0;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     animation: fadeIn 2s;
 }
+
 .SearchBar:deep(.el-input__inner) {
     height: 36px;
 }

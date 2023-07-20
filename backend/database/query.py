@@ -1,7 +1,10 @@
 
 from typing import List
 import copy
-import ujson as json
+try:
+    import ujson as json
+except:
+    import json
 
 from database.table import BaseService, teachers, comments
 from schemas.teacher import TeacherInfo, TeacherBase, TeacherCareer, TeacherListPer
