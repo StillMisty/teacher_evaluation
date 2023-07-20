@@ -49,13 +49,35 @@ const logo_show = ref(true)
 
 const queryString = ref('')
 
-let timeout
+let timer = null
 const querySearch = (queryString, cb) => {
-    const results = queryString ? getSuggestions(queryString) : []
-    clearTimeout(timeout)
-    timeout = setTimeout(() => {
+    const results = queryString ? getSuggestions(queryString) : getHotTeacher()
+
+    timer && clearTimeout(timer)
+    timer = setTimeout(() => {
         cb(results)
-    }, 200 * Math.random())
+    }, 100)
+}
+
+const getHotTeacher = () => {
+    const result = []
+    fetch(`${Props.baseUrl}/api/teacher/get_hot_teacher_list`)
+        .then((res) => res.json())
+        .then((res) => {
+            if (res.code == 200) {
+                if (res.data.length == 0) {
+                    result.push({
+                        id: -1,
+                        name: '暂无结果'
+                    })
+                }else{
+                    result.push(...res.data)
+                }
+            }
+        }).catch((err) => {
+            console.log(err)
+    })
+    return result
 }
 
 const getSuggestions = (queryString) => {

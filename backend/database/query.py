@@ -150,3 +150,7 @@ def query_teacher_list(teacher_query: str) ->List[TeacherListPer]|None:
     else: 
         return [TeacherListPer(id=teacher.id,name=teacher.name) for teacher in teacher_list]
 
+def query_hot_teacher_list() -> list[TeacherListPer]:
+    '''获取热门教师列表'''
+    teacher_list = BaseService.session.query(teachers).order_by(teachers.views.desc()).limit(4).all()
+    return [TeacherListPer(id=teacher.id,name=teacher.name) for teacher in teacher_list]

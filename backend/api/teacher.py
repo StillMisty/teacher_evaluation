@@ -253,3 +253,14 @@ async def get_teacher_list(
     else:
         data = teachers_list
         return success(data=data)
+    
+@router.get("/get_hot_teacher_list")
+async def get_hot_teacher_list():
+    '''获取热门教师列表'''
+    teachers_list = query_hot_teacher_list()
+    
+    if teachers == None:
+        return fail(msg="没有找到该教师",code=404)
+    else:
+        data = teachers_list
+        return success(data=data)
