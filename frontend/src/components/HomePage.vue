@@ -108,7 +108,7 @@ section {
     justify-content: center;
     flex-direction: column;
     width: 100%;
-    transition: all 2s;
+    transition: var(--el-transition-all)
 }
 
 .SearchBar{
