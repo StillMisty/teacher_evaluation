@@ -9,6 +9,7 @@ import json
 import asyncio
 
 async def get_total():
+    '''获取总的教师信息'''
     url = "http://cta.jxufe.edu.cn/searchTeachers"
     data = {"fid": 109051,
             "teaName": None,
@@ -26,7 +27,7 @@ async def get_total():
     json.dump(json_data, open("total_info.json", "w", encoding="utf-8"),    ensure_ascii=False, indent=4)
     
 async def get_detail(info):
-    
+    '''获取教师详细信息'''
     url = r"http://cta.jxufe.edu.cn/home/teachInfo"
     
     uid = info.get("uid")
@@ -52,7 +53,7 @@ async def get_detail(info):
             return
             
 async def get_photo(info):
-    
+    '''获取教师头像'''
     temp = info.get("photo")
     if temp == None or temp == "":
         return
@@ -94,7 +95,7 @@ async def main():
         tasks.append(get_detail(info))
         tasks.append(get_photo(info))
         # 限制并发数
-        if tasks.__len__() >= 10:
+        if tasks.__len__() >= 20:
             await asyncio.gather(*tasks)
             tasks.clear()
       
