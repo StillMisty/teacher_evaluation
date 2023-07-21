@@ -11,7 +11,7 @@ class Config(BaseSettings):
     APP_DEBUG: bool = False
     
     # 是否使用IP验证
-    SEGMENTATION: bool = False
+    SEGMENTATION: bool = True
     #财专ip端，用列表方便扩展
     SEGMENTATION_IP: list[str] = ['210.35.192.0-210.35.207.255'] 
     

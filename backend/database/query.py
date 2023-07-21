@@ -15,6 +15,7 @@ from utils import *
 TEACHER_DIR = settings.TEACHER_DIR
 
 def query_name(name: str) -> List[teachers|None]:
+    '''根据name获取教师信息'''
     teacher = BaseService.session.query(teachers).filter(teachers.name==name).first()
     if teacher == None:
         return None
@@ -22,6 +23,7 @@ def query_name(name: str) -> List[teachers|None]:
         return copy.deepcopy(teacher)
 
 def query_id(id: int) -> teachers|None:
+    '''根据id获取教师信息'''
     if id < 0:
         return None
     teacher = BaseService.session.query(teachers).filter(teachers.id==id).first()
@@ -31,6 +33,7 @@ def query_id(id: int) -> teachers|None:
         return copy.deepcopy(teacher)
     
 def query_views(id: int) -> int:
+    '''根据id获取教师浏览量'''
     teacher = BaseService.session.query(teachers).filter(teachers.id==id).first()
     if teacher == None:
         return None

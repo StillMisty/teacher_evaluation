@@ -1,8 +1,9 @@
 
-from database.table import BaseService, teachers, comments
-from schemas.teacher import TeacherInfo, TeacherBase, TeacherEvaluate
+from database.table import BaseService, teachers
+from schemas.teacher import TeacherEvaluate
 
 def updata_teacher_score(evaluate: TeacherEvaluate):
+    '''更新教师评分'''
     teacher = BaseService.session.query(teachers).filter(teachers.id==evaluate.id).first()
     if teacher == None:
         return None

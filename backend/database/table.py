@@ -47,4 +47,5 @@ class comments(Base):
     is_delete = Column(Integer, default=0)
     
 def create_table():
+    '''创建表'''
     Base.metadata.create_all(BaseService.engine)
