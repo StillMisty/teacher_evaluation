@@ -26,12 +26,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:80/',
+        target: 'http://localhost:80/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },      
       '/headimgs': {
-        target: 'http://localhost:80/',
+        target: 'http://localhost:80/headimgs',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/headimgs/, '')
       }

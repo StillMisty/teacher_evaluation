@@ -6,24 +6,22 @@
           {{ comment.content }}
         </el-text>
       </div>
-      <div class="time"><el-text type="info" size="small">
-        {{ comment.create_time }}
-      </el-text></div>
+      <div class="time">
+        <el-text type="info" size="small">
+          {{ comment.create_time }}
+        </el-text>
+      </div>
     </li>
   </ul>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
-
-
 const Props = defineProps({
-  comments : {
-      type: Array,
-      default: () => []
+  comments: {
+    type: Array,
+    default: () => []
   }
 })
-
 </script>
 
 <style>

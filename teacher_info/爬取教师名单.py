@@ -1,7 +1,7 @@
 import httpx
+import json
 import os
 os.chdir(os.path.dirname(__file__))
-import json
 
 url = "http://cta.jxufe.edu.cn/searchTeachers"
 data = {"fid": 109051,

@@ -1,15 +1,14 @@
 
 import httpx
 import IPy
-
 from config import settings
 
 
-def get_academicTitle(degress: int) -> str:
+def get_academicTitle(degress: str) -> str:
     '''获取职称'''
     try:
         degress = int(degress)
-    except:
+    except Exception:
         return ""
     
     if degress == 1:
@@ -32,7 +31,7 @@ def get_academicTitle(degress: int) -> str:
         return ""
     
 async def content_review(content: str) -> bool:
-    if settings.ACCESS_TOKEN == '':
+    if settings.ACCESS_TOKEN is None:
         return True
     
     request_url = "https://aip.baidubce.com/rest/2.0/solution/v1/text_censor/v2/user_defined"
@@ -57,7 +56,7 @@ async def content_review(content: str) -> bool:
         
 def ip_review(ip: str) -> bool:
     # ip验证是否开启
-    if settings.SEGMENTATION == False:
+    if settings.SEGMENTATION is False:
         return True
     
     for i in settings.SEGMENTATION_IP:

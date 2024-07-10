@@ -20,5 +20,3 @@ teacherInfo里的academicTitle是职称
 * 30：助教
 
 teacherInfo里的updateTime是数据更新时间
-
-一定要注意：它返回的数据有的有，有的没有，你一定要判断一下，不然会报错

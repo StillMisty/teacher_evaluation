@@ -31,7 +31,6 @@
 </template>
 
 <script setup>
-import { defineProps} from 'vue'
 
 const Props = defineProps({
     name: {
@@ -70,6 +69,7 @@ const Props = defineProps({
         type: String,
         default: ''
     },
+    
 })
 
 </script>

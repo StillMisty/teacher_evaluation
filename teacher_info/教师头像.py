@@ -19,7 +19,7 @@ async def main():
         for i in total_info:
             temp = i.get("photo")
             uid = i.get("uid")
-            if temp == None or temp == "":
+            if temp is None or temp == "":
                 break
             photo = url + temp + ".png"
             print(photo)

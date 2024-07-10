@@ -22,7 +22,7 @@ class TeacherCareer(BaseModel):
     content: str
 
 class TeacherEvaluate(BaseModel):
-    id: conint(strict=True, ge=0)
+    teacher_id: conint(strict=True, ge=0)
     teaching_attitude: conint(strict=True, ge=0, le=5) #教学态度
     teaching_level: conint(strict=True, ge=0, le=5) #教学水平
     score_end: conint(strict=True, ge=0, le=5) #期末捞人
@@ -32,3 +32,15 @@ class TeacherEvaluate(BaseModel):
 class TeacherListPer(BaseModel):
     id: int
     name: str
+    
+class TeacherUpload(BaseModel):
+    name: str
+    email: str
+    phone: str
+    photo: str
+    academicDegree: str
+    academicTitle: str
+    groupname: str
+    officeAddr: str
+    researchFields: str
+    subject: str
