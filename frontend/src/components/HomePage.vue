@@ -2,7 +2,7 @@
   <section :style="{ height: homeHeight }">
     <h1 style="margin-bottom: 20px; cursor: default; user-select: none" v-if="!Props.isSearch">
       <el-image
-        :src="Props.logoUrl"
+        :src="`${Props.baseUrl}/logo.png`"
         @error="logo_show = !logo_show"
         v-if="logo_show"
         style="height: 72px; width: 72px; vertical-align: bottom"

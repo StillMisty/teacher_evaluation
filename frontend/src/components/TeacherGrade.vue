@@ -138,7 +138,17 @@ function postScores() {
       attendance_attitude: PersonalGrade.value[4].value
     })
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 429) {
+        ElMessage({
+          message: '评分过于频繁，请稍后再试',
+          type: 'error'
+        })
+        throw new Error('请求过于频繁')
+      } else {
+        return res.json()
+      }
+    })
     .then((res) => {
       if (res.code === 200) {
         ElMessage({
@@ -150,6 +160,15 @@ function postScores() {
       } else if (res.code === 403) {
         ElMessage({
           message: 'IP不在允许内，请连接校园网后重试',
+          type: 'error'
+        })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+      if (err.code === 429) {
+        ElMessage({
+          message: '评论过于频繁，请稍后再试',
           type: 'error'
         })
       }
@@ -175,7 +194,17 @@ function postComment() {
       content: comment.value
     })
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.status === 429) {
+        ElMessage({
+          message: '评论过于频繁，请稍后再试',
+          type: 'error'
+        })
+        throw new Error('请求过于频繁')
+      } else {
+        return res.json()
+      }
+    })
     .then((res) => {
       if (res.code === 200) {
         ElMessage({

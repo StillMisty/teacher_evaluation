@@ -41,7 +41,7 @@ function searchTeacher(teacher_id) {
       if (teacher.value.researchFields != '') {
         teacher.value.researchFields = teacher.value.researchFields.slice(2, -2).replace(/"/g, ' ')
       }
-      teacher.value.photo = `${baseUrl}/${teacher.value.photo}`
+      teacher.value.photo = `${baseUrl}/headimgs/${teacher.value.photo}`
     })
 
   fetch(`${baseUrl}/api/teacher/id_teacher_evaluate?teacher_id=${teacher_id}`)

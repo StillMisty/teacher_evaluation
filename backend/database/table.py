@@ -59,6 +59,12 @@ class Teachers(Base):
     is_delete = Column(Integer, default=0)
     columnInfo = Column(JSON)
 
+    teaching_attitude = Column(Integer, default=0)
+    teaching_level = Column(Integer, default=0)
+    score_end = Column(Integer, default=0)
+    teacher_morality = Column(Integer, default=0)
+    attendance_attitude = Column(Integer, default=0)
+
     teachers_score = relationship("Teachers_score", backref="teahcers")
     comments = relationship("Comments", backref="teahcers")
 

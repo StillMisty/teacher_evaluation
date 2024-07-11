@@ -6,7 +6,6 @@
 /frontend/dist/
 
 /backend/static/
-/backend/blog.db
-/backend/blog.db-journal
+/backend/temp/
 
 *.pyc

@@ -1,5 +1,4 @@
 from typing import List
-import copy
 from database.table import BaseService, Teachers, Comments
 from schemas.teacher import TeacherBase, TeacherListPer
 from schemas.comment import Comment
@@ -43,9 +42,14 @@ def query_teacher_evaluate(id: int) -> dict | None:
     teacher = BaseService.session.query(Teachers).filter(Teachers.id == id).first()
     if teacher is None:
         return None
-    # TODO: 优化
-
-    return {"教学态度": 1, "教学水平": 2, "期末捞人": 3, "教师人品": 4, "考勤宽松": 3}
+    
+    return {
+        "教学态度": teacher.teaching_attitude,
+        "教学水平": teacher.teaching_level,
+        "期末捞人": teacher.score_end,
+        "教师人品": teacher.teacher_morality,
+        "考勤宽松": teacher.attendance_attitude,
+    }
 
 
 def query_teacher_list(teacher_query: str) -> List[TeacherListPer] | None:

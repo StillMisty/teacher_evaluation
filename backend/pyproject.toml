@@ -13,6 +13,8 @@ markdown = "^3.4.3"
 ujson = "^5.8.0"
 ipy = "^1.1"
 mysqlclient = "^2.2.4"
+redis = "^5.0.7"
+slowapi = "^0.1.9"
 
 
 [build-system]
