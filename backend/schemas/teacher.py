@@ -8,7 +8,7 @@ class TeacherBase(BaseModel):
     photo: str
     academicDegree: str
     academicTitle: str
-    groupname: str
+    deptName: str
     views: int
 
     

@@ -12,7 +12,7 @@ TEACHER_DIR = Path(settings.TEACHER_DIR)
 
 
 class TeacherDAO:
-    def insert_all_teacher():
+    async def insert_all(self):
         """插入所有老师的信息"""
         for file in TEACHER_DIR.iterdir():
             with open(file, "r", encoding="utf-8") as f:
@@ -49,15 +49,21 @@ class TeacherDAO:
             )
             BaseService.session.add(new_teacher)
         BaseService.session.commit()
-        
-    def updata_teacher_score():
+
+    async def updata_score(self):
         """基于时间序列更新教师评分"""
         # 获取所有教师的id
-        teachers_id = BaseService.session.query(Teachers_score.teacher_id).distinct ().all()
+        teachers_id = (
+            BaseService.session.query(Teachers_score.teacher_id).distinct().all()
+        )
         # 获取教师的评分，基于时间加权，最近的评分权重最大
         for teacher_id in teachers_id:
             teacher_id = teacher_id[0]
-            scores = BaseService.session.query(Teachers_score).filter   (Teachers_score.teacher_id == teacher_id).all()
+            scores = (
+                BaseService.session.query(Teachers_score)
+                .filter(Teachers_score.teacher_id == teacher_id)
+                .all()
+            )
             teaching_attitude = 0
             teaching_level = 0
             score_end = 0
@@ -76,7 +82,11 @@ class TeacherDAO:
                 teacher_morality += score.teacher_morality * time_weight
                 attendance_attitude += score.attendance_attitude * time_weight
             # 更新教师评分
-            teacher = BaseService.session.query(Teachers).filter(Teachers.id ==     teacher_id).first()
+            teacher = (
+                BaseService.session.query(Teachers)
+                .filter(Teachers.id == teacher_id)
+                .first()
+            )
             teacher.teaching_attitude = teaching_attitude
             teacher.teaching_level = teaching_level
             teacher.score_end = score_end
@@ -84,39 +94,50 @@ class TeacherDAO:
             teacher.attendance_attitude = attendance_attitude
         BaseService.session.commit()
 
-    def query_name(name: str) -> List[Teachers | None]:
+    async def query_name(self, name: str) -> List[Teachers]:
         """根据name获取教师信息"""
         teacher = (
             BaseService.session.query(Teachers).filter(Teachers.name == name).first()
         )
         return teacher
 
-    def query_Info(id: int) -> TeacherInfo | None:
+    async def query_Info(self, id: int):
         """根据id获取教师信息"""
         teacher = BaseService.session.query(Teachers).filter(Teachers.id == id).first()
-        return teacher
-
-    def query_allcomment(id: int) -> List[Comment] | None:
-        """根据id获取教师全部评论"""
-        comments = (
-            BaseService.session.query(Comments)
-            .filter(Comments.teacher_id == id)
-            .filter(Comments.is_delete is False)
-            .all()
-        )
-        if comments == []:
+        if teacher is None:
             return None
         else:
-            return [
-                Comment(
-                    id=comment.id,
-                    content=comment.content,
-                    create_time=comment.create_time,
-                )
-                for comment in comments
-            ]
+            teacher.views += 1
+            BaseService.session.commit()
+            return TeacherInfo(
+                id=teacher.id,
+                name=teacher.name,
+                email=teacher.email,
+                phone=teacher.phone,
+                photo=teacher.photo,
+                academicDegree=teacher.academicDegree,
+                academicTitle=teacher.academicTitle,
+                deptName=teacher.deptName,
+                officeAddr=teacher.officeAddr,
+                researchFields=teacher.researchFields,
+                subject=teacher.subject,
+                views=teacher.views,
+                columnInfo=teacher.columnInfo,
+            )
 
-    def query_teacher_evaluate(id: int) -> dict | None:
+    async def query_allcomment(self, id: int) -> List[Comment]:
+        """根据id获取教师全部评论"""
+        comments = (
+            BaseService.session.query(Comments).filter(Comments.teacher_id == id).all()
+        )
+        return [
+            Comment(
+                id=comment.id, content=comment.content, create_time=comment.create_time
+            )
+            for comment in comments
+        ]
+
+    async def query_evaluate(self, id: int) -> dict | None:
         """根据id获取教师评价"""
         teacher = BaseService.session.query(Teachers).filter(Teachers.id == id).first()
         if teacher is None:
@@ -130,7 +151,7 @@ class TeacherDAO:
             "考勤宽松": teacher.attendance_attitude,
         }
 
-    def query_teacher_list(teacher_query: str) -> List[TeacherListPer] | None:
+    async def query_teacher_list(self, teacher_query: str) -> List[TeacherListPer]:
         """获取教师列表"""
         teacher_list = (
             BaseService.session.query(Teachers)
@@ -139,15 +160,11 @@ class TeacherDAO:
             .limit(8)
             .all()
         )
-        if teacher_list == []:
-            return None
-        else:
-            return [
-                TeacherListPer(id=teacher.id, name=teacher.name)
-                for teacher in teacher_list
-            ]
+        return [
+            TeacherListPer(id=teacher.id, name=teacher.name) for teacher in teacher_list
+        ]
 
-    def query_hot_teacher_list() -> list[TeacherListPer]:
+    async def query_hot_teacher_list(self) -> list[TeacherListPer]:
         """获取热门教师列表"""
         teacher_list = (
             BaseService.session.query(Teachers)
@@ -158,3 +175,6 @@ class TeacherDAO:
         return [
             TeacherListPer(id=teacher.id, name=teacher.name) for teacher in teacher_list
         ]
+
+
+teacherDAO = TeacherDAO()

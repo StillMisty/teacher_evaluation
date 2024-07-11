@@ -1,24 +1,22 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
+from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from config import settings, limiter
 from routers import teacherHTML
 from routers import adminHTML
 from api import teacher
 from database.table import create_table
-from database.insert import insert_all_teacher
-from database.updata import updata_teacher_score
+from database.DAO.TeacherDAO import teacherDAO
 import os
 
 os.chdir(os.path.dirname(__file__))
 
 
 create_table()
-insert_all_teacher()
-
+teacherDAO.insert_all()
+teacherDAO.updata_score()
 
 
 app = FastAPI(debug=settings.APP_DEBUG)
@@ -33,8 +31,6 @@ app.include_router(teacherHTML.router)
 app.include_router(adminHTML.router)
 # api
 app.include_router(teacher.router)
-
-updata_teacher_score()
 
 # 跨域
 app.add_middleware(

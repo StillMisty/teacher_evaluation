@@ -16,7 +16,7 @@
             <p><el-text type="primary" style="font-size: var(--el-font-size-extra-large);">{{ Props.name }}</el-text></p>
             <div>
                 <p><el-text type="info">{{ Props.academicDegree }} {{ Props.academicTitle }}</el-text></p>
-                <p><el-text type="info">{{ Props.groupname }}</el-text></p>
+                <p><el-text type="info">{{ Props.deptName }}</el-text></p>
             </div>
             <div>
                 <p v-if="Props.email != ''"><el-text>Email：{{ Props.email }}</el-text></p>
@@ -45,7 +45,7 @@ const Props = defineProps({
         type: String,
         default: ''
     },
-    groupname: {
+    deptName: {
         type: String,
         default: ''
     },
