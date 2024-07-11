@@ -16,7 +16,10 @@ def insert_all_teacher():
             teacher_info = json.loads(f.read())
         id = teacher_info["teacherInfo"].get("uid")
 
-        if BaseService.session.query(Teachers).filter(Teachers.id == id).first():
+        if (
+            id <= 0
+            or BaseService.session.query(Teachers).filter(Teachers.id == id).first()
+        ):
             continue
         columnInfo = []
         for column in teacher_info.get("columnInfo"):

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, JSON
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, JSON, Boolean
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -36,10 +36,10 @@ class Teachers_score(Base):
 class Comments(Base):
     __tablename__ = "comments"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    content = Column(String(200))
+    content = Column(String(300))
     create_time = Column(DateTime, default=datetime.now())
     teacher_id = Column(Integer, ForeignKey("teahcers.id"))
-    is_delete = Column(Integer, default=0)
+    is_delete = Column(Boolean, default=False)
 
 
 class Teachers(Base):
@@ -56,7 +56,6 @@ class Teachers(Base):
     researchFields = Column(Text, default="")
     subject = Column(String(20), default="")
     views = Column(Integer, default=0)
-    is_delete = Column(Integer, default=0)
     columnInfo = Column(JSON)
 
     teaching_attitude = Column(Integer, default=0)

@@ -60,6 +60,9 @@ async def get_teacher_allcomment(
 async def id_teacher_evaluate(
     teacher_id: int = Query(...),
 ):
+    
+    
+    
     """从id获取教师评分"""
     evaluate = query_teacher_evaluate(teacher_id)
     if evaluate is None:

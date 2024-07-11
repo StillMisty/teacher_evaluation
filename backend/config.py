@@ -1,9 +1,8 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 from pydantic import BaseSettings
-from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi import Limiter
 from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
 
 class Config(BaseSettings):
     # 加载环境变量

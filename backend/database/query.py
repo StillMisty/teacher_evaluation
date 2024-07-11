@@ -1,10 +1,7 @@
 from typing import List
 from database.table import BaseService, Teachers, Comments
-from schemas.teacher import TeacherBase, TeacherListPer
+from schemas.teacher import TeacherInfo, TeacherListPer
 from schemas.comment import Comment
-from config import settings
-
-TEACHER_DIR = settings.TEACHER_DIR
 
 
 def query_name(name: str) -> List[Teachers | None]:
@@ -13,7 +10,7 @@ def query_name(name: str) -> List[Teachers | None]:
     return teacher
 
 
-def query_Info(id: int) -> TeacherBase | None:
+def query_Info(id: int) -> TeacherInfo | None:
     """根据id获取教师信息"""
     teacher = BaseService.session.query(Teachers).filter(Teachers.id == id).first()
     return teacher
@@ -21,11 +18,10 @@ def query_Info(id: int) -> TeacherBase | None:
 
 def query_allcomment(id: int) -> List[Comment] | None:
     """根据id获取教师全部评论"""
-    
     comments = (
         BaseService.session.query(Comments)
         .filter(Comments.teacher_id == id)
-        .filter(Comments.is_delete == 0)
+        .filter(Comments.is_delete is False)
         .all()
     )
     if comments == []:

@@ -36,5 +36,17 @@ def updata_teacher_score():
         teacher.teacher_morality = teacher_morality
         teacher.attendance_attitude = attendance_attitude
     BaseService.session.commit()
-        
+    
+def update_score(score: TeacherEvaluate):
+    """更新教师评分"""
+    new_score = Teachers_score(
+        teacher_id=score.teacher_id,
+        teaching_attitude=score.teaching_attitude,
+        teaching_level=score.teaching_level,
+        score_end=score.score_end,
+        teacher_morality=score.teacher_morality,
+        attendance_attitude=score.attendance_attitude,
+    )
+    
+    
         
