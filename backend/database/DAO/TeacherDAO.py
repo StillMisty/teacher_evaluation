@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 from database.table import BaseService, Teachers, Comments, Teachers_score
-from schemas.teacher import TeacherInfo, TeacherListPer
+from schemas.teacher import TeacherBase, TeacherEvaluate, TeacherInfo, TeacherListPer
 from schemas.comment import Comment
 from config import settings
 from utils import get_academicTitle
@@ -12,7 +12,8 @@ TEACHER_DIR = Path(settings.TEACHER_DIR)
 
 
 class TeacherDAO:
-    async def insert_all(self):
+    @staticmethod
+    def insert_all():
         """插入所有老师的信息"""
         for file in TEACHER_DIR.iterdir():
             with open(file, "r", encoding="utf-8") as f:
@@ -50,7 +51,31 @@ class TeacherDAO:
             BaseService.session.add(new_teacher)
         BaseService.session.commit()
 
-    async def updata_score(self):
+    @staticmethod
+    def update(teacher: TeacherInfo):
+        """更新教师信息"""
+        old_teacher = (
+            BaseService.session.query(Teachers)
+            .filter(Teachers.id == teacher.id)
+            .first()
+        )
+        if old_teacher is None:
+            return None
+        old_teacher.name = teacher.name
+        old_teacher.email = teacher.email
+        old_teacher.phone = teacher.phone
+        old_teacher.academicDegree = teacher.academicDegree
+        old_teacher.academicTitle = teacher.academicTitle
+        old_teacher.deptName = teacher.deptName
+        old_teacher.officeAddr = teacher.officeAddr
+        old_teacher.researchFields = teacher.researchFields
+        old_teacher.subject = teacher.subject
+        old_teacher.views = teacher.views
+        old_teacher.columnInfo = teacher.columnInfo
+        BaseService.session.commit()
+
+    @staticmethod
+    def updata_score():
         """基于时间序列更新教师评分"""
         # 获取所有教师的id
         teachers_id = (
@@ -93,15 +118,52 @@ class TeacherDAO:
             teacher.teacher_morality = teacher_morality
             teacher.attendance_attitude = attendance_attitude
         BaseService.session.commit()
+        
+    @staticmethod
+    async def update_photo(id: int, photo_name: str) -> bool:
+        teacher = BaseService.session.query(Teachers).filter(Teachers.id == id).first()
+        if teacher is None:
+            return False
+        teacher.photo = photo_name
+        BaseService.session.commit()
+        return True
 
-    async def query_name(self, name: str) -> List[Teachers]:
-        """根据name获取教师信息"""
+    @staticmethod
+    async def query_name(name: str) -> Teachers:
+        """根据name获取教师信息,name必须完全匹配"""
         teacher = (
             BaseService.session.query(Teachers).filter(Teachers.name == name).first()
         )
         return teacher
 
-    async def query_Info(self, id: int):
+    @staticmethod
+    async def query_name_like(name: str) -> List[TeacherBase]:
+        """根据name获取教师信息,name模糊匹配"""
+        teacher = (
+            BaseService.session.query(Teachers)
+            .filter(Teachers.name.like(f"%{name}%"))
+            .all()
+        )
+        return [
+            TeacherBase(
+                id=teacher.id,
+                name=teacher.name,
+                email=teacher.email,
+                phone=teacher.phone,
+                photo=teacher.photo,
+                academicDegree=teacher.academicDegree,
+                academicTitle=teacher.academicTitle,
+                deptName=teacher.deptName,
+                officeAddr=teacher.officeAddr,
+                researchFields=teacher.researchFields,
+                subject=teacher.subject,
+                views=teacher.views,
+            )
+            for teacher in teacher
+        ]
+
+    @staticmethod
+    async def query_info(id: int):
         """根据id获取教师信息"""
         teacher = BaseService.session.query(Teachers).filter(Teachers.id == id).first()
         if teacher is None:
@@ -125,7 +187,8 @@ class TeacherDAO:
                 columnInfo=teacher.columnInfo,
             )
 
-    async def query_allcomment(self, id: int) -> List[Comment]:
+    @staticmethod
+    async def query_allcomment(id: int) -> List[Comment]:
         """根据id获取教师全部评论"""
         comments = (
             BaseService.session.query(Comments).filter(Comments.teacher_id == id).all()
@@ -137,7 +200,8 @@ class TeacherDAO:
             for comment in comments
         ]
 
-    async def query_evaluate(self, id: int) -> dict | None:
+    @staticmethod
+    async def query_evaluate(id: int) -> dict | None:
         """根据id获取教师评价"""
         teacher = BaseService.session.query(Teachers).filter(Teachers.id == id).first()
         if teacher is None:
@@ -151,7 +215,8 @@ class TeacherDAO:
             "考勤宽松": teacher.attendance_attitude,
         }
 
-    async def query_teacher_list(self, teacher_query: str) -> List[TeacherListPer]:
+    @staticmethod
+    async def query_teacher_list(teacher_query: str) -> List[TeacherListPer]:
         """获取教师列表"""
         teacher_list = (
             BaseService.session.query(Teachers)
@@ -164,7 +229,8 @@ class TeacherDAO:
             TeacherListPer(id=teacher.id, name=teacher.name) for teacher in teacher_list
         ]
 
-    async def query_hot_teacher_list(self) -> list[TeacherListPer]:
+    @staticmethod
+    async def query_hot_teacher_list() -> list[TeacherListPer]:
         """获取热门教师列表"""
         teacher_list = (
             BaseService.session.query(Teachers)
@@ -176,5 +242,35 @@ class TeacherDAO:
             TeacherListPer(id=teacher.id, name=teacher.name) for teacher in teacher_list
         ]
 
+    @staticmethod
+    async def get_teacher_by_page(page: int, size: int = 8) -> List[TeacherBase]:
+        """分页获取教师列表"""
+        teacher_list = (
+            BaseService.session.query(Teachers)
+            .order_by(Teachers.views.desc())
+            .limit(size)
+            .offset((page - 1) * size)
+            .all()
+        )
+        return [
+            TeacherBase(
+                id=teacher.id,
+                name=teacher.name,
+                email=teacher.email,
+                phone=teacher.phone,
+                photo=teacher.photo,
+                academicDegree=teacher.academicDegree,
+                academicTitle=teacher.academicTitle,
+                deptName=teacher.deptName,
+                officeAddr=teacher.officeAddr,
+                researchFields=teacher.researchFields,
+                subject=teacher.subject,
+                views=teacher.views,
+            )
+            for teacher in teacher_list
+        ]
 
-teacherDAO = TeacherDAO()
+    @staticmethod
+    async def get_teacher_total() -> int:
+        """获取教师总数"""
+        return BaseService.session.query(Teachers).count()

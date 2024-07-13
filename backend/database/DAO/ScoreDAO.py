@@ -1,10 +1,19 @@
-from database.table import BaseService, Teachers_score
+from database.table import BaseService, Teachers, Teachers_score
 from schemas.teacher import TeacherEvaluate
 
 
 class ScoreDAO:
-    async def insert(self, score: TeacherEvaluate):
+    @staticmethod
+    async def insert(score: TeacherEvaluate):
         """插入教师评分"""
+        if (
+            BaseService.session.query(Teachers)
+            .filter(Teachers.id == score.teacher_id)
+            .first()
+            is None
+        ):
+            return False
+
         new_score = Teachers_score(
             teacher_id=score.teacher_id,
             teaching_attitude=score.teaching_attitude,
@@ -13,14 +22,12 @@ class ScoreDAO:
             teacher_morality=score.teacher_morality,
             attendance_attitude=score.attendance_attitude,
         )
-        try:
-            BaseService.session.add(new_score)
-            BaseService.session.commit()
-        except Exception:
-            return False
+        BaseService.session.add(new_score)
+        BaseService.session.commit()
         return True
 
-    async def delete(self, id: int):
+    @staticmethod
+    async def delete(id: int):
         """删除教师评分"""
         score = (
             BaseService.session.query(Teachers_score)
@@ -33,7 +40,25 @@ class ScoreDAO:
         BaseService.session.commit()
         return True
 
-    async def query_by_id(self, id: int):
+    @staticmethod
+    async def query_all():
+        """获取所有教师评分"""
+        scores = BaseService.session.query(Teachers_score).all()
+        return [
+            {
+                "id": score.id,
+                "teacher_id": score.teacher_id,
+                "teaching_attitude": score.teaching_attitude,
+                "teaching_level": score.teaching_level,
+                "score_end": score.score_end,
+                "teacher_morality": score.teacher_morality,
+                "attendance_attitude": score.attendance_attitude,
+            }
+            for score in scores
+        ]
+
+    @staticmethod
+    async def query_by_id(id: int):
         """根据id获取教师评分"""
         score = (
             BaseService.session.query(Teachers_score)
@@ -42,22 +67,20 @@ class ScoreDAO:
         )
         return score
 
-    async def update(self, id: int, score: TeacherEvaluate):
+    @staticmethod
+    async def update(id: int, score: TeacherEvaluate):
         """更新教师评分"""
-        score = (
+        old_score = (
             BaseService.session.query(Teachers_score)
             .filter(Teachers_score.id == id)
             .first()
         )
-        if score is None:
+        if old_score is None:
             return False
-        score.teaching_attitude = score.teaching_attitude
-        score.teaching_level = score.teaching_level
-        score.score_end = score.score_end
-        score.teacher_morality = score.teacher_morality
-        score.attendance_attitude = score.attendance_attitude
+        old_score.teaching_attitude = score.teaching_attitude
+        old_score.teaching_level = score.teaching_level
+        old_score.score_end = score.score_end
+        old_score.teacher_morality = score.teacher_morality
+        old_score.attendance_attitude = score.attendance_attitude
         BaseService.session.commit()
         return True
-
-
-scoreDAO = ScoreDAO()

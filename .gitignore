@@ -8,4 +8,7 @@
 /backend/static/
 /backend/temp/
 
+/backstage/node_modules/
+/backstage/dist/
+
 *.pyc

@@ -6,17 +6,18 @@ from slowapi.errors import RateLimitExceeded
 from config import settings, limiter
 from routers import teacherHTML
 from routers import adminHTML
-from api import teacher
+from api import teacher, admin
+from auth import authentication as auth
 from database.table import create_table
-from database.DAO.TeacherDAO import teacherDAO
+from database.DAO.TeacherDAO import TeacherDAO
 import os
 
 os.chdir(os.path.dirname(__file__))
 
 
 create_table()
-teacherDAO.insert_all()
-teacherDAO.updata_score()
+TeacherDAO.insert_all()
+TeacherDAO.updata_score()
 
 
 app = FastAPI(debug=settings.APP_DEBUG)
@@ -29,8 +30,10 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # 路由
 app.include_router(teacherHTML.router)
 app.include_router(adminHTML.router)
+app.include_router(auth.router)
 # api
 app.include_router(teacher.router)
+app.include_router(admin.router)
 
 # 跨域
 app.add_middleware(
@@ -44,6 +47,13 @@ app.add_middleware(
 
 # 静态资源目录
 app.mount("/", StaticFiles(directory=settings.STATIC_DIR), name="static")
+
+# @app.on_event("shutdown")
+# async def shutdown():
+#     # 关闭数据库连接
+#     BaseService.session.commit()
+#     BaseService.session.close()
+#     BaseService.engine.dispose()
 
 if __name__ == "__main__":
     import uvicorn

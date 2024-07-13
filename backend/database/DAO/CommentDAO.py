@@ -1,24 +1,26 @@
-from database.table import BaseService, Comments
-from schemas.comment import CommentBase
+from database.table import BaseService, Comments, Teachers
+from schemas.comment import Admin_comment, CommentBase
 from utils import content_review
 
 
 class CommentDAO:
-    async def insert(self, comment: CommentBase) -> bool:
+    @staticmethod
+    async def insert(comment: CommentBase) -> bool:
         """插入评论"""
         result = await content_review(comment.content)
         if result is False:
             return False
-
-        new_comment = Comments(content=comment.content, teacher_id=comment.id)
-        try:
-            BaseService.session.add(new_comment)
-            BaseService.session.commit()
-        except Exception:
+        
+        if BaseService.session.query(Teachers).filter(Teachers.id == comment.id).first() is None:
             return False
+        
+        new_comment = Comments(content=comment.content, teacher_id=comment.id)
+        BaseService.session.add(new_comment)
+        BaseService.session.commit()
         return True
 
-    async def delete(self, id: int) -> bool:
+    @staticmethod
+    async def delete(id: int) -> bool:
         """删除评论"""
         comment = BaseService.session.query(Comments).filter(Comments.id == id).first()
         if comment is None:
@@ -27,17 +29,20 @@ class CommentDAO:
         BaseService.session.commit()
         return True
 
-    async def query_all(self) -> list:
+    @staticmethod
+    async def query_all() -> list:
         """获取全部评论"""
         comments = BaseService.session.query(Comments).all()
         return comments
 
-    async def query_by_id(self, id: int) -> Comments:
+    @staticmethod
+    async def query_by_id(id: int) -> Comments:
         """根据id获取评论"""
         comment = BaseService.session.query(Comments).filter(Comments.id == id).first()
         return comment
 
-    async def query_by_teacher_id(self, teacher_id: int) -> list:
+    @staticmethod
+    async def query_by_teacher_id(teacher_id: int) -> list:
         """根据教师id获取评论"""
         comments = (
             BaseService.session.query(Comments)
@@ -46,7 +51,8 @@ class CommentDAO:
         )
         return comments
 
-    async def query_by_content(self, content: str) -> list:
+    @staticmethod
+    async def query_by_content(content: str) -> list:
         """根据内容获取评论"""
         comments = (
             BaseService.session.query(Comments)
@@ -55,14 +61,16 @@ class CommentDAO:
         )
         return comments
 
-    async def update(self, id: int, comment: CommentBase) -> bool:
+    @staticmethod
+    async def update(id: int, comment: Admin_comment) -> bool:
         """更新评论"""
-        comment = BaseService.session.query(Comments).filter(Comments.id == id).first()
-        if comment is None:
+        old_comment = (
+            BaseService.session.query(Comments).filter(Comments.id == id).first()
+        )
+        if old_comment is None:
             return False
-        comment.content = comment.content
+        old_comment.teacher_id = comment.teacher_id
+        old_comment.content = comment.content
+        old_comment.is_delete = comment.is_delete
         BaseService.session.commit()
         return True
-
-
-commentDAO = CommentDAO()

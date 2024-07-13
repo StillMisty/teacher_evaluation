@@ -1,3 +1,7 @@
-import json
-s = "[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-print(json.loads(s))
+from passlib.context import CryptContext
+
+password = "123456"
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context.hash(password)
+
+

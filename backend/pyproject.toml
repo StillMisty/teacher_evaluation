@@ -9,12 +9,13 @@ readme = "README.md"
 python = "^3.11"
 sqlalchemy = "^2.0.17"
 fastapi = {extras = ["all"], version = "^0.99.1"}
-markdown = "^3.4.3"
 ujson = "^5.8.0"
 ipy = "^1.1"
 mysqlclient = "^2.2.4"
-redis = "^5.0.7"
 slowapi = "^0.1.9"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+pyjwt = "^2.8.0"
+psutil = "^6.0.0"
 
 
 [build-system]

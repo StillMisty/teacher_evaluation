@@ -1,4 +1,13 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, JSON, Boolean
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    DateTime,
+    ForeignKey,
+    Text,
+    JSON,
+    Boolean,
+)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -19,7 +28,7 @@ Base = declarative_base()
 class Teachers_score(Base):
     __tablename__ = "teachers_score"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    teacher_id = Column(Integer, ForeignKey("teahcers.id"))
+    teacher_id = Column(Integer, ForeignKey("teachers.id"))
     time = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
     # 教学态度
     teaching_attitude = Column(Integer, default=0)
@@ -36,14 +45,15 @@ class Teachers_score(Base):
 class Comments(Base):
     __tablename__ = "comments"
     id = Column(Integer, primary_key=True, autoincrement=True)
+    teacher_id = Column(Integer, ForeignKey("teachers.id"))
     content = Column(String(300))
     create_time = Column(DateTime, default=datetime.now())
-    teacher_id = Column(Integer, ForeignKey("teahcers.id"))
+    change_time = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
     is_delete = Column(Boolean, default=False)
 
 
 class Teachers(Base):
-    __tablename__ = "teahcers"
+    __tablename__ = "teachers"
     id = Column(Integer, primary_key=True)
     name = Column(String(20), default="")
     email = Column(String(50), default="")
@@ -64,8 +74,17 @@ class Teachers(Base):
     teacher_morality = Column(Integer, default=0)
     attendance_attitude = Column(Integer, default=0)
 
-    teachers_score = relationship("Teachers_score", backref="teahcers")
-    comments = relationship("Comments", backref="teahcers")
+    teachers_score = relationship("Teachers_score", backref="teachers")
+    comments = relationship("Comments", backref="teachers")
+
+
+class Admin(Base):
+    __tablename__ = "admin"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String(20), nullable=False, unique=True)
+    password = Column(String(60), nullable=False)
+    # 是否禁用
+    disabled = Column(Boolean, default=False)
 
 
 def create_table():
