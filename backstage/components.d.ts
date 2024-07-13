@@ -51,6 +51,10 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
+    UpdateScoreButton: typeof import('./src/components/UpdateScoreButton.vue')['default']
+    UpdateScoreCard: typeof import('./src/components/UpdateScoreCard.vue')['default']
+    UpdateTeacherButton: typeof import('./src/components/UpdateTeacherButton.vue')['default']
+    UpdateTeacherCard: typeof import('./src/components/UpdateTeacherCard.vue')['default']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }
   export interface ComponentCustomProperties {

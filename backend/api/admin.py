@@ -59,6 +59,10 @@ async def get_teacher(page: int = Query(..., ge=1), size: int = Query(..., ge=1)
     total = await TeacherDAO.get_teacher_total()
     return success(data={"teacher_list": teacher_list, "total": total})
 
+@router.post("/teacher/update", summary="根据爬虫更新教师信息")
+async def update_teacher_by_spider():
+    TeacherDAO.insert_all()
+    return success(msg="更新成功")
 
 @router.get("/teacher/{id}", summary="教师详细信息")
 async def get_teacher_info(id: int):
@@ -93,6 +97,10 @@ async def get_all_teacher_evaluate():
         return fail(msg="评分为空")
     return success(data=score)
 
+@router.post("/teacher/evaluate/update", summary="更新教师评分")
+async def update_teacher_evaluate():
+    TeacherDAO.updata_score()
+    return success(msg="更新成功")
 
 @router.get("/teacher/evaluate/{id}", summary="教师评分")
 async def get_teacher_evaluate(id: int):

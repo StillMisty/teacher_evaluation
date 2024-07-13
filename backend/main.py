@@ -48,13 +48,6 @@ app.add_middleware(
 # 静态资源目录
 app.mount("/", StaticFiles(directory=settings.STATIC_DIR), name="static")
 
-# @app.on_event("shutdown")
-# async def shutdown():
-#     # 关闭数据库连接
-#     BaseService.session.commit()
-#     BaseService.session.close()
-#     BaseService.engine.dispose()
-
 if __name__ == "__main__":
     import uvicorn
 
